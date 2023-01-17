@@ -1,27 +1,39 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 
-public class MedicationSchedule : MonoBehaviour
+public class MedicationSchedule
 {
+    public Medication Medication;
     public MedicationInventoryScriptableObject MedicationInventory;
     public RefillReminder RefillReminder;
     public List<Reminder> Reminders;
 
-    private void Start()
-    {
-        GenerateReminders();
-        RefillReminder.MedicationInventory = MedicationInventory;
-    }
-
     public void GenerateReminders()
     {
-        Reminders.Clear();
-        foreach (MedicationStock stock in MedicationInventory.MedicationStockList)
+        // if (Medication.frequencyTimeFrame == MedicationFrequencyTimeFrame.AsNeeded) return;
+        // if (Medication.frequencyTimeFrame == MedicationFrequencyTimeFrame.Weekly) return;
+        //
+        // int hoursBetweenDoses = 24 / (int)Medication.frequencyTimeFrame;
+        // DateTime nextReminderTime = DateTime.Now.AddHours(hoursBetweenDoses);
+        //
+        // while (nextReminderTime < DateTime.Now)
+        // {
+        //     nextReminderTime = nextReminderTime.AddHours(hoursBetweenDoses);
+        // }
+        //
+        // Reminder reminder = new Reminder();
+        // reminder.ReminderTime = nextReminderTime;
+        // reminder.Medication = Medication;
+        // Reminders.Add(reminder);
+    }
+
+    public void TakeMedication()
+    {
+        int stock = MedicationInventory.GetMedicationQuantity(Medication);
+        if (stock > 0)
         {
-            for (int i = 0; i < stock.medication.Frequency; i++)
-            {
-                Reminders.Add(new Reminder(stock.medication, i));
-            }
+            MedicationInventory.RemoveMedicationStock(Medication, 1);
+            RefillReminder.CheckForLowMedicationLevel();
         }
     }
 }

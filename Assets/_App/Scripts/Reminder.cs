@@ -9,23 +9,21 @@ public class Reminder
     public bool IsActive;
     public Action OnReminderShown;
 
-    public Reminder(Medication medication, int reminderNumber)
-    {
-        Medication = medication;
-        ReminderTime = GetReminderTime(medication, reminderNumber);
-        IsActive = true;
-    }
-
-    private DateTime GetReminderTime(Medication medication, int reminderNumber)
-    {
-        TimeSpan timeOfDay = TimeSpan.FromHours(medication.ReminderTime);
-        return DateTime.Today + timeOfDay + TimeSpan.FromDays(reminderNumber);
-    }
-
     public void ShowReminder()
     {
-        if (OnReminderShown != null) OnReminderShown.Invoke();
-        // Show reminder UI
-        Debug.Log("Reminder for: " + Medication.Name);
+        if (!IsActive) return;
+        // code to display the reminder, for example:
+        Debug.Log("Reminder: Take " + Medication.Name + " at " + ReminderTime.ToString());
+        OnReminderShown?.Invoke();
+    }
+
+    public void ScheduleReminder()
+    {
+        // if (Medication.frequencyTimeFrame == MedicationFrequencyTimeFrame.AsNeeded) return;
+        // if (Medication.frequencyTimeFrame == MedicationFrequencyTimeFrame.Weekly) return;
+        //
+        // int hoursBetweenDoses = 24 / (int)Medication.frequencyTimeFrame;
+        // ReminderTime = ReminderTime.AddHours(hoursBetweenDoses);
+        // IsActive = true;
     }
 }

@@ -1,5 +1,5 @@
 [System.Serializable]
-public struct MedicationStock
+public class MedicationStock
 {
     public Medication medication;
     public int quantity;
